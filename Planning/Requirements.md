@@ -3,7 +3,7 @@
 This document describes the software requirements for the Blazing Checkers Web Application.
 
 ## Known Requirements
-1. Multiplayer checkers game
+1. Multiplayer checkers game built with Blazor
 2. The game will follow the rules of [Standard American Checkers](http://www.se.rit.edu/~swen-261/projects/WebCheckers/American%20Rules.html)
 3. The game will be played in realtime
 4. Users will register their own account with username/password
