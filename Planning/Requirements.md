@@ -2,14 +2,31 @@
 
 This document describes the software requirements for the Blazing Checkers Web Application.
 
-## Known Requirements
-1. Multiplayer checkers game built with Blazor
+## Application Requirements
+1. Multiplayer checkers game web application
 2. The game will follow the rules of [Standard American Checkers](http://www.se.rit.edu/~swen-261/projects/WebCheckers/American%20Rules.html)
 3. The game will be played in realtime
 4. Users will register their own account with username/password
 5. Winners and losers of each game will be tracked in a database
+6. The game state will be saved in a database after each turn
+7. The following statistics will be calculated for each player:
+   * number of games played
+   * % won / % loss
+   * number of jumps (overall and avg per game)
+   * number of kinged pieces (overall and avg per game)
+8. The game will timeout after 7 days of inactivity
+9. Players will be randomly assigned to opponents
+   * In the future, this may be weighted based on skill level
+10. Players will have the option to rematch previous opponents
 
-## Questions
+## Out of Scope
+1. Offline support
+2. Role-based authorization
+3. Local multiplayer 
+4. Player v. AI
+5. Other front ends (i.e., mobile, desktop)
+
+## Initial Client Responses
 1. Will the checkers game end if one player disconnects, or should the state of the game be stored in a database?
    > A: The game state should be saved as the game is played.
 2. If a player takes too long to make a move, should the game be automatically surrendered?
