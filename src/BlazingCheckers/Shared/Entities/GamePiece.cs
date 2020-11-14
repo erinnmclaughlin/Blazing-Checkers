@@ -7,5 +7,8 @@
         public string UserId { get; set; }
         public bool IsKinged { get; set; }
         public int StartPosition { get; set; }
+
+        public Game Game { get; set; }
+        public Player Player { get; set; }
     }
 }
