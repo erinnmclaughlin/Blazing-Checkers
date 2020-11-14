@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using BlazingCheckers.Server.Models
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+@using BlazingCheckers.Shared.Entities
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
