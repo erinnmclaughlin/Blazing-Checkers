@@ -9,6 +9,8 @@ namespace BlazingCheckers.Server
         public MappingProfile()
         {
             CreateMap<Game, GameDto>();
+            CreateMap<Player, PlayerDto>();
+            CreateMap<User, UserDto>();
         }
     }
 }

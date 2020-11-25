@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazingCheckers.Server.Data.Migrations
 {
     [DbContext(typeof(BlazingCheckersContext))]
-    [Migration("20201125191954_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20201125200650_CreateDb")]
+    partial class CreateDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,8 +31,7 @@ namespace BlazingCheckers.Server.Data.Migrations
 
                     b.HasKey("MoveId", "PieceId");
 
-                    b.HasIndex("PieceId")
-                        .IsUnique();
+                    b.HasIndex("PieceId");
 
                     b.ToTable("Captures");
                 });
@@ -61,6 +60,15 @@ namespace BlazingCheckers.Server.Data.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("Games");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedOn = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            StatusId = 2,
+                            UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.GamePiece", b =>
@@ -165,21 +173,30 @@ namespace BlazingCheckers.Server.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("GameId1")
-                        .HasColumnType("int");
-
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.HasKey("GameId", "UserId");
-
-                    b.HasIndex("GameId1");
 
                     b.HasIndex("StatusId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Players");
+
+                    b.HasData(
+                        new
+                        {
+                            GameId = 1,
+                            UserId = "c51a5105-1bc9-44c1-ac95-aaad7b313f44",
+                            StatusId = 1
+                        },
+                        new
+                        {
+                            GameId = 1,
+                            UserId = "accdf374-a78f-4664-bc8d-0b8a72cb0a6d",
+                            StatusId = 2
+                        });
                 });
 
             modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.PlayerStatus", b =>
@@ -195,6 +212,33 @@ namespace BlazingCheckers.Server.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PlayerStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Status = "Current"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Status = "Waiting"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Status = "Winner"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Status = "Loser"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Status = "Draw"
+                        });
                 });
 
             modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.User", b =>
@@ -260,6 +304,40 @@ namespace BlazingCheckers.Server.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "c51a5105-1bc9-44c1-ac95-aaad7b313f44",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "1d5dff62-fae8-4315-89bf-e71e6e884a09",
+                            Email = "Player1@BlazingCheckers.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "PLAYER1@BLAZINGCHECKERS.COM",
+                            NormalizedUserName = "PLAYER1@BLAZINGCHECKERS.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEASu2xsK27f3SmwBGGUjuIoskicZ41AG3LwS9b+xNLrb1hS6LDjW0AyjTMkEaJREEQ==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "TLNV3R47YSOFDEME7LUINVHZF5TXD77C",
+                            TwoFactorEnabled = false,
+                            UserName = "Player1@BlazingCheckers.com"
+                        },
+                        new
+                        {
+                            Id = "accdf374-a78f-4664-bc8d-0b8a72cb0a6d",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "53a55fe9-743b-49c1-bd54-f4ef57d83cca",
+                            Email = "Player2@BlazingCheckers.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "PLAYER2@BLAZINGCHECKERS.COM",
+                            NormalizedUserName = "PLAYER2@BLAZINGCHECKERS.COM",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBSVnKR+DG2RNcLAf3NbXK/g5S4hLirRg3MidXOmfo59uR+7492+hi6qNVBNqNSZrA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "AQAAAAEAACcQAAAAEBSVnKR+DG2RNcLAf3NbXK/g5S4hLirRg3MidXOmfo59uR+7492+hi6qNVBNqNSZrA==",
+                            TwoFactorEnabled = false,
+                            UserName = "Player2@BlazingCheckers.com"
+                        });
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -509,8 +587,8 @@ namespace BlazingCheckers.Server.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("BlazingCheckers.Server.Data.Entities.GamePiece", "Piece")
-                        .WithOne()
-                        .HasForeignKey("BlazingCheckers.Server.Data.Entities.Capture", "PieceId")
+                        .WithMany()
+                        .HasForeignKey("PieceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -575,14 +653,10 @@ namespace BlazingCheckers.Server.Data.Migrations
             modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.Player", b =>
                 {
                     b.HasOne("BlazingCheckers.Server.Data.Entities.Game", "Game")
-                        .WithMany()
+                        .WithMany("Players")
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("BlazingCheckers.Server.Data.Entities.Game", null)
-                        .WithMany("Players")
-                        .HasForeignKey("GameId1");
 
                     b.HasOne("BlazingCheckers.Server.Data.Entities.PlayerStatus", "Status")
                         .WithMany()

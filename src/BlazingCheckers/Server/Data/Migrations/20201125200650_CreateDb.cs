@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace BlazingCheckers.Server.Data.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class CreateDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -245,8 +245,7 @@ namespace BlazingCheckers.Server.Data.Migrations
                 {
                     GameId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false),
-                    GameId1 = table.Column<int>(type: "int", nullable: true)
+                    StatusId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -263,12 +262,6 @@ namespace BlazingCheckers.Server.Data.Migrations
                         principalTable: "Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Players_Games_GameId1",
-                        column: x => x.GameId1,
-                        principalTable: "Games",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Players_PlayerStatuses_StatusId",
                         column: x => x.StatusId,
@@ -365,6 +358,15 @@ namespace BlazingCheckers.Server.Data.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[,]
+                {
+                    { "c51a5105-1bc9-44c1-ac95-aaad7b313f44", 0, "1d5dff62-fae8-4315-89bf-e71e6e884a09", "Player1@BlazingCheckers.com", true, false, null, "PLAYER1@BLAZINGCHECKERS.COM", "PLAYER1@BLAZINGCHECKERS.COM", "AQAAAAEAACcQAAAAEASu2xsK27f3SmwBGGUjuIoskicZ41AG3LwS9b+xNLrb1hS6LDjW0AyjTMkEaJREEQ==", null, false, "TLNV3R47YSOFDEME7LUINVHZF5TXD77C", false, "Player1@BlazingCheckers.com" },
+                    { "accdf374-a78f-4664-bc8d-0b8a72cb0a6d", 0, "53a55fe9-743b-49c1-bd54-f4ef57d83cca", "Player2@BlazingCheckers.com", true, false, null, "PLAYER2@BLAZINGCHECKERS.COM", "PLAYER2@BLAZINGCHECKERS.COM", "AQAAAAEAACcQAAAAEBSVnKR+DG2RNcLAf3NbXK/g5S4hLirRg3MidXOmfo59uR+7492+hi6qNVBNqNSZrA==", null, false, "AQAAAAEAACcQAAAAEBSVnKR+DG2RNcLAf3NbXK/g5S4hLirRg3MidXOmfo59uR+7492+hi6qNVBNqNSZrA==", false, "Player2@BlazingCheckers.com" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "GameStatuses",
                 columns: new[] { "Id", "Status" },
                 values: new object[,]
@@ -374,6 +376,33 @@ namespace BlazingCheckers.Server.Data.Migrations
                     { 3, "Completed" },
                     { 4, "Timed Out" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "PlayerStatuses",
+                columns: new[] { "Id", "Status" },
+                values: new object[,]
+                {
+                    { 1, "Current" },
+                    { 2, "Waiting" },
+                    { 3, "Winner" },
+                    { 4, "Loser" },
+                    { 5, "Draw" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Games",
+                columns: new[] { "Id", "CompletedOn", "CreatedOn", "StatusId", "UpdatedOn" },
+                values: new object[] { 1, null, new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
+
+            migrationBuilder.InsertData(
+                table: "Players",
+                columns: new[] { "GameId", "UserId", "StatusId" },
+                values: new object[] { 1, "c51a5105-1bc9-44c1-ac95-aaad7b313f44", 1 });
+
+            migrationBuilder.InsertData(
+                table: "Players",
+                columns: new[] { "GameId", "UserId", "StatusId" },
+                values: new object[] { 1, "accdf374-a78f-4664-bc8d-0b8a72cb0a6d", 2 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -417,8 +446,7 @@ namespace BlazingCheckers.Server.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Captures_PieceId",
                 table: "Captures",
-                column: "PieceId",
-                unique: true);
+                column: "PieceId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -465,11 +493,6 @@ namespace BlazingCheckers.Server.Data.Migrations
                 name: "IX_PersistedGrants_SubjectId_SessionId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "SessionId", "Type" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Players_GameId1",
-                table: "Players",
-                column: "GameId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Players_StatusId",

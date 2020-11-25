@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using BlazingCheckers.Server.Data.Entities;
 using BlazingCheckers.Server.Repositories;
 using BlazingCheckers.Shared.Dtos;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace BlazingCheckers.Server.Controllers
 {
@@ -17,12 +16,11 @@ namespace BlazingCheckers.Server.Controllers
     {
         private readonly IMapper _mapper;
         private readonly DbGamesRepository _repo;
-        private readonly UserManager<User> _userManager;
-        public GamesController(IMapper mapper, DbGamesRepository repo, UserManager<User> userManager)
+
+        public GamesController(IMapper mapper, DbGamesRepository repo)
         {
             _mapper = mapper;
             _repo = repo;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -30,7 +28,7 @@ namespace BlazingCheckers.Server.Controllers
         {
             try
             {
-                var games = _repo.GetGamesForUser(_userManager.GetUserId(User));
+                var games = _repo.GetGamesForUser(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 return Ok(_mapper.Map<IEnumerable<GameDto>>(games));
             }
             catch (Exception ex)
@@ -45,7 +43,7 @@ namespace BlazingCheckers.Server.Controllers
         {
             try
             {
-                var games = _repo.GetActiveGamesForUser(_userManager.GetUserId(User));
+                var games = _repo.GetActiveGamesForUser(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 return Ok(_mapper.Map<IEnumerable<GameDto>>(games));
             }
             catch (Exception ex)
@@ -60,7 +58,7 @@ namespace BlazingCheckers.Server.Controllers
         {
             try
             {
-                var games = _repo.GetCompletedGamesForUser(_userManager.GetUserId(User));
+                var games = _repo.GetCompletedGamesForUser(User.FindFirstValue(ClaimTypes.NameIdentifier));
                 return Ok(_mapper.Map<IEnumerable<GameDto>>(games));
             }
             catch (Exception ex)
