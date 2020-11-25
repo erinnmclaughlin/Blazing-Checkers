@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace BlazingCheckers.Server.Migrations
+namespace BlazingCheckers.Server.Data.Migrations
 {
-    public partial class CreateDb : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -245,7 +245,8 @@ namespace BlazingCheckers.Server.Migrations
                 {
                     GameId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StatusId = table.Column<int>(type: "int", nullable: false)
+                    StatusId = table.Column<int>(type: "int", nullable: false),
+                    GameId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -262,6 +263,12 @@ namespace BlazingCheckers.Server.Migrations
                         principalTable: "Games",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Players_Games_GameId1",
+                        column: x => x.GameId1,
+                        principalTable: "Games",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Players_PlayerStatuses_StatusId",
                         column: x => x.StatusId,
@@ -357,6 +364,17 @@ namespace BlazingCheckers.Server.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                table: "GameStatuses",
+                columns: new[] { "Id", "Status" },
+                values: new object[,]
+                {
+                    { 1, "Pending" },
+                    { 2, "Active" },
+                    { 3, "Completed" },
+                    { 4, "Timed Out" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -447,6 +465,11 @@ namespace BlazingCheckers.Server.Migrations
                 name: "IX_PersistedGrants_SubjectId_SessionId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "SessionId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Players_GameId1",
+                table: "Players",
+                column: "GameId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Players_StatusId",

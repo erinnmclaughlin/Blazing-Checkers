@@ -1,44 +1,32 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @attribute [Authorize]
-@inject HttpClient Http
+@inject GamesViewModel ViewModel
 
 <h1>Games</h1>
 
-@if (Response == null)
+@if (ViewModel.Games == null)
 {
-    <p>Loading...</p>
+    <p>Loading games...</p>
 }
-else if (!Response.Data.Any())
+else if (!ViewModel.Games.Any())
 {
-    <p>Found 0 results.</p>
+    <p>You currently have 0 active games.</p>
 }
 else
 {
-    <p>Page @Response.PageNumber of @Response.MaximumPageNumber</p>
-
     <ul>
-        @foreach (var game in Response.Data)
+        @foreach (var game in ViewModel.Games)
         {
-            <li>Game # @game.Id</li>
+            <li>Game @game.Id</li>
         }
     </ul>
 }
 
 @code
 {
-    ApiPagedResponse<GameModel> Response;
-
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            Response = await Http.GetFromJsonAsync<ApiPagedResponse<GameModel>>("api/games?pageNumber=2&pageSize=2");
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
+        await ViewModel.Initialize();
     }
 }

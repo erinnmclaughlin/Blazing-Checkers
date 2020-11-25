@@ -1,7 +1,9 @@
-﻿namespace BlazingCheckers.Shared.Entities
+﻿namespace BlazingCheckers.Server.Data.Entities
 {
-    public class Move
+    public class Move : IEntity
     {
+        public object PK => Id;
+
         public int Id { get; set; }
         public string UserId { get; set; }
         public int GameId { get; set; }

@@ -1,7 +1,9 @@
-﻿namespace BlazingCheckers.Shared.Entities
+﻿namespace BlazingCheckers.Server.Data.Entities
 {
-    public class GamePiece
+    public class GamePiece : IEntity
     {
+        public object PK => Id;
+
         public int Id { get; set; }
         public int GameId { get; set; }
         public string UserId { get; set; }

@@ -1,52 +1,86 @@
-﻿using BlazingCheckers.Server.Data;
-using BlazingCheckers.Shared.Contracts;
-using BlazingCheckers.Shared.Contracts.Queries;
-using BlazingCheckers.Shared.Entities;
-using BlazingCheckers.Shared.Models;
+﻿using AutoMapper;
+using BlazingCheckers.Server.Data.Entities;
+using BlazingCheckers.Server.Repositories;
+using BlazingCheckers.Shared.Dtos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace BlazingCheckers.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Authorize]
+    [Route("api/users/current/[controller]")]
     [ApiController]
     public class GamesController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
-
-        public GamesController(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+        private readonly DbGamesRepository _repo;
+        private readonly UserManager<User> _userManager;
+        public GamesController(IMapper mapper, DbGamesRepository repo, UserManager<User> userManager)
         {
-            _context = context;
+            _mapper = mapper;
+            _repo = repo;
+            _userManager = userManager;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IApiListResponse<GameModel>>> GetAllGames([FromQuery] PaginationQuery paginationQuery = null)
+        public IActionResult GetGamesForCurrentUser()
         {
             try
             {
-                IQueryable<Game> query = _context.Games.Include(g => g.Status);
-                
-                if (paginationQuery == null)
-                {
-                    return Ok(new ApiListResponse<GameModel>(await query.Select(g => new GameModel(g)).ToListAsync()));
-                }
-
-                int maxPageNumber = (int)Math.Ceiling((double)query.Count() / paginationQuery.PageSize);
-
-                if (paginationQuery.PageNumber > maxPageNumber)
-                    paginationQuery.PageNumber = maxPageNumber;
-
-                query = query.Skip((paginationQuery.PageNumber - 1) * paginationQuery.PageSize).Take(paginationQuery.PageSize);
-
-                var games = await query.Select(g => new GameModel(g)).ToListAsync();
-
-                return Ok(new ApiPagedResponse<GameModel>(games, paginationQuery.PageNumber, paginationQuery.PageSize, maxPageNumber));
+                var games = _repo.GetGamesForUser(_userManager.GetUserId(User));
+                return Ok(_mapper.Map<IEnumerable<GameDto>>(games));
             }
-            catch
+            catch (Exception ex)
             {
+                // TODO: log exception
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("active")]
+        public IActionResult GetActiveGamesForCurrentUser()
+        {
+            try
+            {
+                var games = _repo.GetActiveGamesForUser(_userManager.GetUserId(User));
+                return Ok(_mapper.Map<IEnumerable<GameDto>>(games));
+            }
+            catch (Exception ex)
+            {
+                // TODO: log exception
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("completed")]
+        public IActionResult GetCompletedGamesForCurrentUser()
+        {
+            try
+            {
+                var games = _repo.GetCompletedGamesForUser(_userManager.GetUserId(User));
+                return Ok(_mapper.Map<IEnumerable<GameDto>>(games));
+            }
+            catch (Exception ex)
+            {
+                // TODO: log exception
+                return StatusCode(500);
+            }
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetGameById(int id)
+        {
+            try
+            {
+                var game = _repo.GetGameDetails(id);
+                return Ok(_mapper.Map<GameDto>(game));
+            }
+            catch (Exception ex)
+            {
+                // TODO: log exception
                 return StatusCode(500);
             }
         }

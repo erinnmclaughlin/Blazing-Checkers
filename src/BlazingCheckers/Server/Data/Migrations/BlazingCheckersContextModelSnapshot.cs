@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace BlazingCheckers.Server.Migrations
+namespace BlazingCheckers.Server.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(BlazingCheckersContext))]
+    partial class BlazingCheckersContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -19,7 +19,7 @@ namespace BlazingCheckers.Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.Capture", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.Capture", b =>
                 {
                     b.Property<int>("MoveId")
                         .HasColumnType("int");
@@ -35,7 +35,7 @@ namespace BlazingCheckers.Server.Migrations
                     b.ToTable("Captures");
                 });
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.Game", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.Game", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -59,53 +59,9 @@ namespace BlazingCheckers.Server.Migrations
                     b.HasIndex("StatusId");
 
                     b.ToTable("Games");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedOn = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
-                            UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedOn = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 2,
-                            UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CreatedOn = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
-                            UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CreatedOn = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
-                            UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CreatedOn = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 3,
-                            UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        },
-                        new
-                        {
-                            Id = 6,
-                            CreatedOn = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            StatusId = 4,
-                            UpdatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.GamePiece", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.GamePiece", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -131,7 +87,7 @@ namespace BlazingCheckers.Server.Migrations
                     b.ToTable("GamePieces");
                 });
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.GameStatus", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.GameStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -168,7 +124,7 @@ namespace BlazingCheckers.Server.Migrations
                         });
                 });
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.Move", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.Move", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -199,7 +155,7 @@ namespace BlazingCheckers.Server.Migrations
                     b.ToTable("Moves");
                 });
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.Player", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.Player", b =>
                 {
                     b.Property<int>("GameId")
                         .HasColumnType("int");
@@ -207,10 +163,15 @@ namespace BlazingCheckers.Server.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int?>("GameId1")
+                        .HasColumnType("int");
+
                     b.Property<int>("StatusId")
                         .HasColumnType("int");
 
                     b.HasKey("GameId", "UserId");
+
+                    b.HasIndex("GameId1");
 
                     b.HasIndex("StatusId");
 
@@ -219,7 +180,7 @@ namespace BlazingCheckers.Server.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.PlayerStatus", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.PlayerStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -234,7 +195,7 @@ namespace BlazingCheckers.Server.Migrations
                     b.ToTable("PlayerStatuses");
                 });
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.User", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -537,17 +498,17 @@ namespace BlazingCheckers.Server.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.Capture", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.Capture", b =>
                 {
-                    b.HasOne("BlazingCheckers.Shared.Entities.Move", "Move")
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.Move", "Move")
                         .WithMany()
                         .HasForeignKey("MoveId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BlazingCheckers.Shared.Entities.GamePiece", "Piece")
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.GamePiece", "Piece")
                         .WithOne()
-                        .HasForeignKey("BlazingCheckers.Shared.Entities.Capture", "PieceId")
+                        .HasForeignKey("BlazingCheckers.Server.Data.Entities.Capture", "PieceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -556,9 +517,9 @@ namespace BlazingCheckers.Server.Migrations
                     b.Navigation("Piece");
                 });
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.Game", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.Game", b =>
                 {
-                    b.HasOne("BlazingCheckers.Shared.Entities.GameStatus", "Status")
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.GameStatus", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -567,15 +528,15 @@ namespace BlazingCheckers.Server.Migrations
                     b.Navigation("Status");
                 });
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.GamePiece", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.GamePiece", b =>
                 {
-                    b.HasOne("BlazingCheckers.Shared.Entities.Game", "Game")
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.Game", "Game")
                         .WithMany()
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlazingCheckers.Shared.Entities.Player", "Player")
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.Player", "Player")
                         .WithMany()
                         .HasForeignKey("GameId", "UserId");
 
@@ -584,21 +545,21 @@ namespace BlazingCheckers.Server.Migrations
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.Move", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.Move", b =>
                 {
-                    b.HasOne("BlazingCheckers.Shared.Entities.Game", "Game")
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.Game", "Game")
                         .WithMany()
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("BlazingCheckers.Shared.Entities.GamePiece", "Piece")
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.GamePiece", "Piece")
                         .WithMany()
                         .HasForeignKey("PieceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlazingCheckers.Shared.Entities.Player", "Player")
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.Player", "Player")
                         .WithMany()
                         .HasForeignKey("GameId", "UserId");
 
@@ -609,21 +570,25 @@ namespace BlazingCheckers.Server.Migrations
                     b.Navigation("Player");
                 });
 
-            modelBuilder.Entity("BlazingCheckers.Shared.Entities.Player", b =>
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.Player", b =>
                 {
-                    b.HasOne("BlazingCheckers.Shared.Entities.Game", "Game")
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.Game", "Game")
                         .WithMany()
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlazingCheckers.Shared.Entities.PlayerStatus", "Status")
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.Game", null)
+                        .WithMany("Players")
+                        .HasForeignKey("GameId1");
+
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.PlayerStatus", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlazingCheckers.Shared.Entities.User", "User")
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -647,7 +612,7 @@ namespace BlazingCheckers.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("BlazingCheckers.Shared.Entities.User", null)
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -656,7 +621,7 @@ namespace BlazingCheckers.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("BlazingCheckers.Shared.Entities.User", null)
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -671,7 +636,7 @@ namespace BlazingCheckers.Server.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BlazingCheckers.Shared.Entities.User", null)
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -680,11 +645,16 @@ namespace BlazingCheckers.Server.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("BlazingCheckers.Shared.Entities.User", null)
+                    b.HasOne("BlazingCheckers.Server.Data.Entities.User", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("BlazingCheckers.Server.Data.Entities.Game", b =>
+                {
+                    b.Navigation("Players");
                 });
 #pragma warning restore 612, 618
         }

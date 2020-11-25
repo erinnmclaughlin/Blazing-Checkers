@@ -1,8 +1,8 @@
-﻿namespace BlazingCheckers.Shared.Entities
+﻿namespace BlazingCheckers.Server.Data.Entities
 {
-    public class Capture
+    public class Capture : IEntity
     {
-        public object Id => new { MoveId, PieceId };
+        public object PK => new { MoveId, PieceId };
         public int MoveId { get; set; }
         public int PieceId { get; set; }
 

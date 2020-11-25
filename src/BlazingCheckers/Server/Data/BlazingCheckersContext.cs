@@ -1,4 +1,4 @@
-﻿using BlazingCheckers.Shared.Entities;
+﻿using BlazingCheckers.Server.Data.Entities;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +7,9 @@ using System.Collections.Generic;
 
 namespace BlazingCheckers.Server.Data
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<User>
+    public class BlazingCheckersContext : ApiAuthorizationDbContext<User>
     {
-        public ApplicationDbContext(
+        public BlazingCheckersContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
         {
@@ -45,15 +45,15 @@ namespace BlazingCheckers.Server.Data
                 new GameStatus { Id = 4, Status = "Timed Out"}
             });
 
-            builder.Entity<Game>().HasData(new List<Game>
-            {
-                new Game { Id = 1, CreatedOn = new System.DateTime(2020, 01, 01), StatusId = 2 },
-                new Game { Id = 2, CreatedOn = new System.DateTime(2020, 01, 01), StatusId = 2 },
-                new Game { Id = 3, CreatedOn = new System.DateTime(2020, 01, 01), StatusId = 3 },
-                new Game { Id = 4, CreatedOn = new System.DateTime(2020, 01, 01), StatusId = 3 },
-                new Game { Id = 5, CreatedOn = new System.DateTime(2020, 01, 01), StatusId = 3 },
-                new Game { Id = 6, CreatedOn = new System.DateTime(2020, 01, 01), StatusId = 4 }
-            });
+            //builder.Entity<Game>().HasData(new List<Game>
+            //{
+            //    new Game { Id = 1, CreatedOn = new System.DateTime(2020, 01, 01), StatusId = 2 },
+            //    new Game { Id = 2, CreatedOn = new System.DateTime(2020, 01, 01), StatusId = 2 },
+            //    new Game { Id = 3, CreatedOn = new System.DateTime(2020, 01, 01), StatusId = 3 },
+            //    new Game { Id = 4, CreatedOn = new System.DateTime(2020, 01, 01), StatusId = 3 },
+            //    new Game { Id = 5, CreatedOn = new System.DateTime(2020, 01, 01), StatusId = 3 },
+            //    new Game { Id = 6, CreatedOn = new System.DateTime(2020, 01, 01), StatusId = 4 }
+            //});
         }
 
         public DbSet<Capture> Captures { get; set; }

@@ -1,5 +1,7 @@
+using AutoMapper;
 using BlazingCheckers.Server.Data;
-using BlazingCheckers.Shared.Entities;
+using BlazingCheckers.Server.Data.Entities;
+using BlazingCheckers.Server.Repositories;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -23,15 +25,18 @@ namespace BlazingCheckers.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
+            services.AddAutoMapper(typeof(Startup));
+            services.AddTransient<DbGamesRepository>();
+
+            services.AddDbContext<BlazingCheckersContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<BlazingCheckersContext>();
 
             services.AddIdentityServer()
-                .AddApiAuthorization<User, ApplicationDbContext>();
+                .AddApiAuthorization<User, BlazingCheckersContext>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
