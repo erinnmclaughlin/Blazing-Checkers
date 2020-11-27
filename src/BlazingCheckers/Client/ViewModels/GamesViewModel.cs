@@ -22,7 +22,8 @@ namespace BlazingCheckers.Client.ViewModels
 
         private List<GameDto> _games;
         public List<GameDto> Games => _games;
-        public async Task LoadGames()
+
+        private async Task LoadGames()
         {
             _games = (await _repo.GetActiveGames()).ToList();
         }

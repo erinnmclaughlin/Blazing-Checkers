@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazingCheckers.Server.Data.Entities
 {
@@ -8,6 +7,8 @@ namespace BlazingCheckers.Server.Data.Entities
         public object PK => new { MoveId, PieceId };
 
         public int MoveId { get; set; }
+
+        [ForeignKey(nameof(MoveId))]
         public Move Move { get; set; }
 
         public int PieceId { get; set; }

@@ -14,6 +14,9 @@ namespace BlazingCheckers.Server.Data.Entities
         public DateTime? CompletedOn { get; set; }
 
         public GameStatus Status { get; set; }
+
+        public virtual ICollection<Move> Moves { get; set; }
         public virtual ICollection<Player> Players { get; set; }
+        public virtual ICollection<GamePiece> Pieces { get; set; }
     }
 }

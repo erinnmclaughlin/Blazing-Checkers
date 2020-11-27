@@ -30,7 +30,8 @@ namespace BlazingCheckers.Server
 
             services.AddDbContext<BlazingCheckersContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection"),
+                    b => b.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)));
 
             services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<BlazingCheckersContext>();

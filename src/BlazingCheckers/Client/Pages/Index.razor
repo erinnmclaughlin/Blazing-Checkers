@@ -19,7 +19,7 @@ else
     <ul>
         @foreach (var game in ViewModel.Games)
         {
-            <li>Game @game.Id</li>
+            <li><a href="games/@game.Id">Game @game.Id</a></li>
         }
     </ul>
 }

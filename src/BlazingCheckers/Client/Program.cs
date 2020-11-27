@@ -24,6 +24,7 @@ namespace BlazingCheckers.Client
             builder.Services.AddApiAuthorization();
 
             builder.Services.AddScoped<ApiGamesRepository>();
+            builder.Services.AddTransient<GameViewModel>();
             builder.Services.AddTransient<GamesViewModel>();
 
             await builder.Build().RunAsync();

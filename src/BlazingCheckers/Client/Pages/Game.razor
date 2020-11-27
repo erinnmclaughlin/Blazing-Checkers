@@ -1,0 +1,15 @@
+﻿@page "/games/{Id:int}"
+@inject GameViewModel ViewModel 
+
+<h3>Game</h3>
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ViewModel.Initialize(Id);
+    }
+}

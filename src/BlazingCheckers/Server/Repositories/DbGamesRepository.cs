@@ -29,7 +29,10 @@ namespace BlazingCheckers.Server.Repositories
 
         public Game GetGameDetails(int id)
         {
-            return _baseQuery.FirstOrDefault(x => x.Id == id);
+            return _baseQuery
+                .Include(g => g.Pieces)
+                    .ThenInclude(p => p.Moves)
+                .FirstOrDefault(x => x.Id == id);
         }
     }
 }
